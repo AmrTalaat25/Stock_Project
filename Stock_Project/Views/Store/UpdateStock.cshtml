@@ -1,0 +1,100 @@
+﻿@model Stock_Project.Models.UpdateStockViewModel
+
+<h1>Update Stock</h1>
+
+<form asp-action="UpdateStock" method="post">
+    <div class="form-group">
+       @*  <label for="StoreId">Select Store</label>
+        <select asp-for="StoreId" class="form-control" asp-items="Model.Stores" id="storeDropdown">
+            <option value="">-- Select Store --</option>
+        </select> *@
+
+        <select asp-for="StoreId" class="form-control" id="storeDropdown" onchange="checkBalance()">
+            <option value="">-- Select Store --</option>
+            @foreach (var store in Model.Stores)
+            {
+                <option value="@store.Id" data-balance="@store.StoreBalanse">
+                    @store.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ItemId">Select Item</label>
+        <select asp-for="ItemId" class="form-control" id="itemDropdown">
+            <option value="">-- Select Item --</option>
+            @foreach(var item in Model.Items)
+            {
+                <option value="@item.Id" data-quantity="@item.ItemQuantity">@item.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Quantity">Quantity</label>
+        <input asp-for="Quantity" class="form-control" id="quantityInput" onkeyup="UpdateBalanceByQuantity()" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Balance">Balance</label>
+        <input asp-for="Balance" class="form-control" id="balanceBox" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+@section Scripts {
+    <script>
+
+        function getQuantityInItem() 
+        {
+            var itemDropdown = document.getElementById("itemDropdown");
+            var selectedOption = itemDropdown.options[itemDropdown.selectedIndex];
+            var quantity = selectedOption.getAttribute("data-quantity");
+            return quantity;
+
+        }
+        function getBalance()
+        {
+            var storeDropdown = document.getElementById("storeDropdown");
+            var selectedOption = storeDropdown.options[storeDropdown.selectedIndex];
+            var balance = selectedOption.getAttribute("data-balance");
+            return balance;
+        }
+        function checkBalance() {
+            debugger
+
+            // var storeDropdown = document.getElementById("storeDropdown");
+            // var selectedOption = storeDropdown.options[storeDropdown.selectedIndex];
+            var balance = getBalance();
+            const balanceBox = document.getElementById("balanceBox");
+            
+            balanceBox.value = Number(balanceBox.value) + Number(balance);
+            
+          
+        }
+      function  UpdateBalanceByQuantity(){
+            debugger
+          var itemQuantity = getQuantityInItem();
+          var Quantity = document.getElementById("quantityInput").value
+            if (itemQuantity < Quantity) 
+            {
+                alert(`Sorry, the quantity of this item in stock is ${itemQuantity}`);
+            }
+
+            if (Quantity == 0 || Quantity == "") {
+
+                var balance = getBalance();
+                balanceBox.value = balance 
+            }
+            if (Quantity > 0) { balanceBox.value = Number(balanceBox.value) + Number(Quantity) }
+        }
+
+
+    </script>}
+
+
+
+
+@* 
+ *@

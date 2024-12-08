@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Stock_Project.Models.Store>
+
+@{
+    ViewData["Title"] = "Store List";
+}
+
+<h1>Store List</h1>
+
+<a asp-action="Create" class="btn btn-primary">Create New Store</a>
+<a asp-action="UpdateStock" class="btn btn-success">Update Stock</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Created Date</th>
+            <th>Balance</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var store in Model)
+        {
+            <tr>
+                <td>@store.Name</td>
+                <td>@store.Location</td>
+                <td>@store.CreatedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@store.Balance   </td>
+                <td>
+                    <a asp-action="Update" asp-route-id="@store.StoreId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@store.StoreId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
